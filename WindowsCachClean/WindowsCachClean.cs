@@ -11,16 +11,22 @@ try
     Console.WriteLine("----------Starting Delete Recent Folder----------");
     DeleteFile(recentDirectory, "*");
     DeleteFolder(recentDirectory, "*");
+    Console.WriteLine(Environment.NewLine, Environment.NewLine);
 
     //delete temp folder
     Console.WriteLine("----------Starting Delete Temp Folder----------");
     DeleteFile(tempDirectory, "*.tmp");
     DeleteFolder(tempDirectory, "*");
+    Console.WriteLine(Environment.NewLine, Environment.NewLine);
 
     //delete prefetch folder
     Console.WriteLine("----------Starting Delete Prefetch Folder----------");
     DeleteFile(prefetchDirectory, "*.pf");
     DeleteFolder(prefetchDirectory, "*");
+
+    Console.WriteLine(Environment.NewLine, Environment.NewLine);
+    Console.WriteLine("Press any key to close the console window...");
+    Console.ReadKey();
 }
 catch (Exception ex)
 {
@@ -99,7 +105,11 @@ bool IsFolderBusy(string file)
     try
     {
         DirectoryInfo directory = new DirectoryInfo(file);
-        Directory.Delete(file, true);
+
+        if (directory.Exists)
+        {
+            Directory.Delete(file, true);
+        }
     }
     catch (UnauthorizedAccessException uex)
     {
