@@ -1,6 +1,7 @@
 ﻿string userProfilePath =
     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-string recentDirectory = userProfilePath + "\\Recent";
+string recentDirectory =
+    Environment.GetFolderPath(Environment.SpecialFolder.Recent);
 string tempDirectory = userProfilePath + "\\AppData\\Local\\Temp";
 string prefetchDirectory = @"C:\Windows\Prefetch\";
 
