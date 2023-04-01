@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-string userProfilePath =
+﻿string userProfilePath =
     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 string recentDirectory = userProfilePath + "\\Recent";
 string tempDirectory = userProfilePath + "\\AppData\\Local\\Temp";
