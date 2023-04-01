@@ -1,6 +1,9 @@
-﻿string userProfilePath =
+﻿using System.Runtime.InteropServices;
+
+string userProfilePath =
     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 string recentDirectory = userProfilePath + "\\Recent";
+string recentFolder = Environment.GetFolderPath(Environment.SpecialFolder.Recent);
 string tempDirectory = userProfilePath + "\\AppData\\Local\\Temp";
 string prefetchDirectory = @"C:\Windows\Prefetch\";
 
@@ -9,7 +12,7 @@ try
 {
     //delete recent folder
     Console.WriteLine("----------Starting Delete Recent Folder----------");
-    DeleteFile(recentDirectory, "*");
+    DeleteFile(recentFolder, "*");
     DeleteFolder(recentDirectory, "*");
     Console.WriteLine(Environment.NewLine, Environment.NewLine);
 
@@ -33,6 +36,7 @@ catch (Exception ex)
     Console.WriteLine(ex.Message);
 }
 
+
 void DeleteFile(string path, string extention)
 {
     try
@@ -51,6 +55,7 @@ void DeleteFile(string path, string extention)
         Console.WriteLine(ex.Message);
     }
 }
+
 
 void DeleteFolder(string path, string extention)
 {
@@ -77,6 +82,7 @@ void DeleteFolder(string path, string extention)
     }
 }
 
+
 bool IsFileBusy(string file)
 {
     bool isBusy = true;
@@ -97,6 +103,7 @@ bool IsFileBusy(string file)
 
     return isBusy;
 }
+
 
 bool IsFolderBusy(string file)
 {
