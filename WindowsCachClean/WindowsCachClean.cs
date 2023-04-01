@@ -3,7 +3,6 @@
 string userProfilePath =
     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 string recentDirectory = userProfilePath + "\\Recent";
-string recentFolder = Environment.GetFolderPath(Environment.SpecialFolder.Recent);
 string tempDirectory = userProfilePath + "\\AppData\\Local\\Temp";
 string prefetchDirectory = @"C:\Windows\Prefetch\";
 
@@ -12,7 +11,7 @@ try
 {
     //delete recent folder
     Console.WriteLine("----------Starting Delete Recent Folder----------");
-    DeleteFile(recentFolder, "*");
+    DeleteFile(recentDirectory, "*");
     DeleteFolder(recentDirectory, "*");
     Console.WriteLine(Environment.NewLine, Environment.NewLine);
 
