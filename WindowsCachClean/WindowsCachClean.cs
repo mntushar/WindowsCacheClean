@@ -19,6 +19,7 @@ try
     DeleteFolder(tempDirectory, "*");
     Console.WriteLine(Environment.NewLine, Environment.NewLine);
 
+
     //delete prefetch folder
     Console.WriteLine("----------Starting Delete Prefetch Folder----------");
     DeleteFile(prefetchDirectory, "*.pf");
@@ -61,7 +62,7 @@ void DeleteFolder(string path, string extention)
         if (Directory.Exists(path))
         {
             string[] directories = Directory.GetDirectories(
-                tempDirectory, extention, SearchOption.AllDirectories
+                path, extention, SearchOption.AllDirectories
                 );
 
             foreach (string directory in directories)
