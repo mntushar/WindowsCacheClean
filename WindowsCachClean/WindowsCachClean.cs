@@ -1,4 +1,9 @@
-﻿string userProfilePath =
+﻿using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
+
+
+string userProfilePath =
     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 string recentDirectory =
     Environment.GetFolderPath(Environment.SpecialFolder.Recent);
@@ -10,12 +15,14 @@ try
 {
     //delete recent folder
     Console.WriteLine("----------Starting Delete Recent Folder----------");
+    SetAccess(recentDirectory);
     DeleteFile(recentDirectory, "*");
     DeleteFolder(recentDirectory, "*");
     Console.WriteLine(Environment.NewLine, Environment.NewLine);
 
     //delete temp folder
     Console.WriteLine("----------Starting Delete Temp Folder----------");
+    SetAccess(tempDirectory);
     DeleteFile(tempDirectory, "*.tmp");
     DeleteFolder(tempDirectory, "*");
     Console.WriteLine(Environment.NewLine, Environment.NewLine);
@@ -23,6 +30,7 @@ try
 
     //delete prefetch folder
     Console.WriteLine("----------Starting Delete Prefetch Folder----------");
+    SetAccess(prefetchDirectory);
     DeleteFile(prefetchDirectory, "*.pf");
     DeleteFolder(prefetchDirectory, "*");
 
@@ -33,6 +41,29 @@ try
 catch (Exception ex)
 {
     Console.WriteLine(ex.Message);
+}
+
+void SetAccess(string folderPath)
+{
+    try
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(folderPath);
+            DirectorySecurity directorySecurity = directoryInfo.GetAccessControl();
+            SecurityIdentifier currentUser = WindowsIdentity.GetCurrent().User;
+
+            if(directorySecurity != null && currentUser != null)
+            {
+                directorySecurity.AddAccessRule(new FileSystemAccessRule(currentUser, FileSystemRights.FullControl, AccessControlType.Allow));
+                directoryInfo.SetAccessControl(directorySecurity);
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
 }
 
 
