@@ -60,7 +60,7 @@ void SetAccess(string folderPath)
             if(directoryInfo != null)
             {
                 DirectorySecurity directorySecurity = directoryInfo.GetAccessControl();
-                SecurityIdentifier currentUser = WindowsIdentity.GetCurrent().User!;
+                SecurityIdentifier? currentUser = WindowsIdentity.GetCurrent().User;
 
                 if (directorySecurity != null && currentUser != null)
                 {
