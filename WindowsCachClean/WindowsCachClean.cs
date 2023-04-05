@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.IO;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
@@ -47,17 +48,26 @@ void SetAccess(string folderPath)
 {
     try
     {
+        if (string.IsNullOrEmpty(folderPath))
+        {
+            return;
+        }
+
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(folderPath);
-            DirectorySecurity directorySecurity = directoryInfo.GetAccessControl();
-            SecurityIdentifier currentUser = WindowsIdentity.GetCurrent().User;
 
-            if(directorySecurity != null && currentUser != null)
+            if(directoryInfo != null)
             {
-                directorySecurity.AddAccessRule(new FileSystemAccessRule(currentUser, FileSystemRights.FullControl, AccessControlType.Allow));
-                directoryInfo.SetAccessControl(directorySecurity);
-            }
+                DirectorySecurity directorySecurity = directoryInfo.GetAccessControl();
+                SecurityIdentifier currentUser = WindowsIdentity.GetCurrent().User;
+
+                if (directorySecurity != null && currentUser != null)
+                {
+                    directorySecurity.AddAccessRule(new FileSystemAccessRule(currentUser, FileSystemRights.FullControl, AccessControlType.Allow));
+                    directoryInfo.SetAccessControl(directorySecurity);
+                }
+            } 
         }
     }
     catch (Exception ex)
@@ -69,6 +79,11 @@ void SetAccess(string folderPath)
 
 void DeleteFile(string path, string extention)
 {
+    if (string.IsNullOrEmpty(path) && string.IsNullOrEmpty(extention))
+    {
+        return;
+    }
+
     try
     {
         foreach (string file in Directory.GetFiles(path, extention))
@@ -89,6 +104,11 @@ void DeleteFile(string path, string extention)
 
 void DeleteFolder(string path, string extention)
 {
+    if (string.IsNullOrEmpty(path) && string.IsNullOrEmpty(extention))
+    {
+        return;
+    }
+
     try
     {
         if (Directory.Exists(path))
@@ -115,6 +135,11 @@ void DeleteFolder(string path, string extention)
 
 bool IsFileBusy(string file)
 {
+    if (string.IsNullOrEmpty(file))
+    {
+        return false;
+    }
+
     bool isBusy = true;
 
     try
@@ -137,6 +162,11 @@ bool IsFileBusy(string file)
 
 bool IsFolderBusy(string file)
 {
+    if (string.IsNullOrEmpty(file))
+    {
+        return false;
+    }
+
     bool isBusy = true;
 
     try
