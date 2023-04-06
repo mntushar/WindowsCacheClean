@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
@@ -17,14 +16,14 @@ try
     //delete recent folder
     Console.WriteLine("----------Starting Delete Recent Folder----------");
     SetAccess(recentDirectory);
-    DeleteFile(recentDirectory, "*");
+    DeleteFile(recentDirectory, "*.*");
     DeleteFolder(recentDirectory, "*");
     Console.WriteLine(Environment.NewLine, Environment.NewLine);
 
     //delete temp folder
     Console.WriteLine("----------Starting Delete Temp Folder----------");
     SetAccess(tempDirectory);
-    DeleteFile(tempDirectory, "*.tmp");
+    DeleteFile(tempDirectory, "*.*");
     DeleteFolder(tempDirectory, "*");
     Console.WriteLine(Environment.NewLine, Environment.NewLine);
 
@@ -32,7 +31,7 @@ try
     //delete prefetch folder
     Console.WriteLine("----------Starting Delete Prefetch Folder----------");
     SetAccess(prefetchDirectory);
-    DeleteFile(prefetchDirectory, "*.pf");
+    DeleteFile(prefetchDirectory, "*.*");
     DeleteFolder(prefetchDirectory, "*");
 
     Console.WriteLine(Environment.NewLine, Environment.NewLine);
@@ -57,7 +56,7 @@ void SetAccess(string folderPath)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(folderPath);
 
-            if(directoryInfo != null)
+            if (directoryInfo != null)
             {
                 DirectorySecurity directorySecurity = directoryInfo.GetAccessControl();
                 SecurityIdentifier? currentUser = WindowsIdentity.GetCurrent().User;
@@ -67,7 +66,7 @@ void SetAccess(string folderPath)
                     directorySecurity.AddAccessRule(new FileSystemAccessRule(currentUser, FileSystemRights.FullControl, AccessControlType.Allow));
                     directoryInfo.SetAccessControl(directorySecurity);
                 }
-            } 
+            }
         }
     }
     catch (Exception ex)
