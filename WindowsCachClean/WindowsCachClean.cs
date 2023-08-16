@@ -13,6 +13,9 @@ string prefetchDirectory = @"C:\Windows\Prefetch\";
 
 try
 {
+    //check adminstrator
+    RequireAdministrator();
+
     //delete recent folder
     Console.WriteLine("----------Starting Delete Recent Folder----------");
     SetAccess(recentDirectory);
@@ -41,6 +44,36 @@ try
 catch (Exception ex)
 {
     Console.WriteLine(ex.Message);
+}
+
+[DllImport("libc")]
+static extern uint getuid();
+
+void RequireAdministrator()
+{
+    string name = System.AppDomain.CurrentDomain.FriendlyName;
+    try
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
+                {
+                    throw new InvalidOperationException($"Application must be run as administrator. Right click the {name} file and select 'run as administrator'.");
+                }
+            }
+        }
+        else if (getuid() != 0)
+        {
+            throw new InvalidOperationException($"Application must be run as root/sudo. From terminal, run the executable as 'sudo {name}'");
+        }
+    }
+    catch (Exception ex)
+    {
+        throw new ApplicationException("Unable to determine administrator or root status", ex);
+    }
 }
 
 void SetAccess(string folderPath)
