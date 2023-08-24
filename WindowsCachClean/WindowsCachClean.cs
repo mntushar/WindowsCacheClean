@@ -11,45 +11,57 @@ string tempDirectory = userProfilePath + "\\AppData\\Local\\Temp";
 string prefetchDirectory = @"C:\Windows\Prefetch\";
 
 
-try
+if (RequireAdministrator())
 {
-    //check adminstrator
-    RequireAdministrator();
-
-    //delete recent folder
-    Console.WriteLine("----------Starting Delete Recent Folder----------");
-    SetAccess(recentDirectory);
-    DeleteFile(recentDirectory, "*.*");
-    DeleteFolder(recentDirectory, "*");
-    Console.WriteLine(Environment.NewLine, Environment.NewLine);
-
-    //delete temp folder
-    Console.WriteLine("----------Starting Delete Temp Folder----------");
-    SetAccess(tempDirectory);
-    DeleteFile(tempDirectory, "*.*");
-    DeleteFolder(tempDirectory, "*");
-    Console.WriteLine(Environment.NewLine, Environment.NewLine);
-
-
-    //delete prefetch folder
-    Console.WriteLine("----------Starting Delete Prefetch Folder----------");
-    SetAccess(prefetchDirectory);
-    DeleteFile(prefetchDirectory, "*.*");
-    DeleteFolder(prefetchDirectory, "*");
-
-    Console.WriteLine(Environment.NewLine, Environment.NewLine);
-    Console.WriteLine("Press any key to close the console window...");
-    Console.ReadKey();
+    RunCachClean();
 }
-catch (Exception ex)
+else
 {
-    Console.WriteLine(ex.Message);
+    Console.WriteLine("Please run to adminstration...");
+}
+
+Console.WriteLine(Environment.NewLine, Environment.NewLine);
+Console.WriteLine("Press any key to close the console window...");
+Console.ReadKey();
+
+void RunCachClean()
+{
+    try
+    {
+        //check adminstrator
+        RequireAdministrator();
+
+        //delete recent folder
+        Console.WriteLine("----------Starting Delete Recent Folder----------");
+        SetAccess(recentDirectory);
+        DeleteFile(recentDirectory, "*.*");
+        DeleteFolder(recentDirectory, "*");
+        Console.WriteLine(Environment.NewLine, Environment.NewLine);
+
+        //delete temp folder
+        Console.WriteLine("----------Starting Delete Temp Folder----------");
+        SetAccess(tempDirectory);
+        DeleteFile(tempDirectory, "*.*");
+        DeleteFolder(tempDirectory, "*");
+        Console.WriteLine(Environment.NewLine, Environment.NewLine);
+
+
+        //delete prefetch folder
+        Console.WriteLine("----------Starting Delete Prefetch Folder----------");
+        SetAccess(prefetchDirectory);
+        DeleteFile(prefetchDirectory, "*.*");
+        DeleteFolder(prefetchDirectory, "*");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
 }
 
 [DllImport("libc")]
 static extern uint getuid();
 
-void RequireAdministrator()
+bool RequireAdministrator()
 {
     string name = System.AppDomain.CurrentDomain.FriendlyName;
     try
@@ -61,19 +73,21 @@ void RequireAdministrator()
                 WindowsPrincipal principal = new WindowsPrincipal(identity);
                 if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
                 {
-                    throw new InvalidOperationException($"Application must be run as administrator. Right click the {name} file and select 'run as administrator'.");
+                    return false;
                 }
             }
         }
         else if (getuid() != 0)
         {
-            throw new InvalidOperationException($"Application must be run as root/sudo. From terminal, run the executable as 'sudo {name}'");
+            return false;
         }
     }
     catch (Exception ex)
     {
         throw new ApplicationException("Unable to determine administrator or root status", ex);
     }
+
+    return true;
 }
 
 void SetAccess(string folderPath)
