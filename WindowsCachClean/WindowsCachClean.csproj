@@ -5,9 +5,9 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>monitor-computer-svgrepo-com.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>WindowsCachClean_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>monitor-computer-svgrepo-com.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
