@@ -11,6 +11,9 @@ string tempDirectory = userProfilePath + "\\AppData\\Local\\Temp";
 string prefetchDirectory = @"C:\Windows\Prefetch\";
 
 
+Console.WriteLine("Please wait program has started...");
+Console.WriteLine(Environment.NewLine, Environment.NewLine);
+
 if (RequireAdministrator())
 {
     RunCachClean();
